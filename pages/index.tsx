@@ -45,7 +45,7 @@ export default function Welcome() {
       <div className={styles.section}>
         <div className={styles.text}>
           <div className={`${styles.logo} pb-4`}>
-            <Image height={60} width={60} src={logo} alt="" />
+            <Image height={400} width={400} src={logo} alt="" />
           </div>
           <h1 className="text-moon-32 font-bold pt-2 pb-4">
           Empower your Community with Trust
@@ -72,7 +72,7 @@ export default function Welcome() {
         </div>
         <div className={styles.text}>
           <div className={`${styles.logo} pb-4`}>
-            <Image src="/Logo-white.png" alt="" />
+            <Image src="/Logo-white.png" width={450} height={400} alt="" />
           </div>
           <h1 className="text-moon-32 font-bold pb-4">Empower your Community with Trust</h1>
           <p className="py-4">

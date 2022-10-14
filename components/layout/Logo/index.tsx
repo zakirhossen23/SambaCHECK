@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import NavLink from 'next/link';
-import logo from "/public/Logo.svg";
 
 export function Logo(): JSX.Element {
     return (
@@ -9,7 +8,7 @@ export function Logo(): JSX.Element {
 
             <NavLink href="/">
                 <div style={{ "display": "flex" }}>
-                    <img className="NavImg" src={logo} />
+                    <img className="NavImg" src="/favicon.ico" />
                 </div>
             </NavLink>
         </div>
