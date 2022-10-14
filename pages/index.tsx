@@ -38,7 +38,7 @@ export default function Welcome() {
           <div className={`${styles.logo} pb-4`}>
             <Image height={400} width={400} src={logo} alt="" />
           </div>
-          <p className="py-4">      
+          <p className="py-4 text-justify">      
             SambaCHECK is a plugin that provides a web3 security infrastructure for 
             organizations, where they can make a non-fungible token (NFT) certification
             for each product automatically. SambaCHECK creates a new layer of security
@@ -66,7 +66,7 @@ export default function Welcome() {
           <div className={`${styles.logo} pb-4`}>
             <Image src={logo_white} width={450} height={400} alt="" />
           </div>
-          <p className="py-4">
+          <p className="py-4 text-justify">
           SambaCHECK is a plugin that provides a web3 security infrastructure for 
             organizations, where they can make a non-fungible token (NFT) certification
             for each product automatically. SambaCHECK creates a new layer of security
