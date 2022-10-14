@@ -61,7 +61,7 @@ export default function Welcome() {
 
           </p>
           <div className="pt-4">
-            <Button onClick={donateCLICK}>Let's check</Button>
+            <Button onClick={donateCLICK}>Let&apos;s check</Button>
           </div>
         </div>
         <div className={styles.image}>
@@ -88,7 +88,7 @@ export default function Welcome() {
 
           </p>
           <div className="pt-4">
-            <Button onClick={CreateProjectsCLICK}>Let's check</Button>
+            <Button onClick={CreateProjectsCLICK}>Let&apos;s check</Button>
           </div>
         </div>
       </div>
