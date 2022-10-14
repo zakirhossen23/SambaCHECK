@@ -7,6 +7,7 @@ import styles from "./Home.module.scss";
 import section2Image from "/public/home/section-2-img.jpg";
 import section1Image from "/public/home/section-1-img.jpg";
 import logo from "/public/Logo.svg";
+import logo_white from "/public/Logo-white.svg";
 
 declare let window: any;
 export default function Welcome() {
@@ -47,19 +48,20 @@ export default function Welcome() {
           <div className={`${styles.logo} pb-4`}>
             <Image height={400} width={400} src={logo} alt="" />
           </div>
-          <h1 className="text-moon-32 font-bold pt-2 pb-4">
-          Empower your Community with Trust
-          </h1>
-          <p className="py-4">
-            SambaCHECK is a platform that empowers your community to take more
-            control over the issues that affect you. Join SambaCHECK and read
-            about the goals for your community and the funds that are available
-            to reach these goals. You can add your own ideas or vote on the
-            ideas of your neighbors. The most popular solutions will be implemented,
-            benefitting the whole community. SambaCHECK gives everybody a vote and a voice.
+          <p className="py-4">      
+            SambaCHECK is a plugin that provides a web3 security infrastructure for 
+            organizations, where they can make a non-fungible token (NFT) certification
+            for each product automatically. SambaCHECK creates a new layer of security
+            where brands can protect their products by providing a unique certification
+            which will be generated when the product is selling. SambaCHECK helps 
+            customers making better decisions, by providing information of the product,
+            which helps not only countering counterfeiting/forgery but also creating 
+            awareness of the impact of a product on the environment.
+
+
           </p>
           <div className="pt-4">
-            <Button onClick={donateCLICK}>Let’s make decisions</Button>
+            <Button onClick={donateCLICK}>Let's check</Button>
           </div>
         </div>
         <div className={styles.image}>
@@ -72,19 +74,21 @@ export default function Welcome() {
         </div>
         <div className={styles.text}>
           <div className={`${styles.logo} pb-4`}>
-            <Image src="/Logo-white.png" width={450} height={400} alt="" />
+            <Image src={logo_white} width={450} height={400} alt="" />
           </div>
-          <h1 className="text-moon-32 font-bold pb-4">Empower your Community with Trust</h1>
           <p className="py-4">
-          SambaCHECK is a platform that empowers your community to take more
-            control over the issues that affect you. Join SambaCHECK and read
-            about the goals for your community and the funds that are available
-            to reach these goals. You can add your own ideas or vote on the
-            ideas of your neighbors. The most popular solutions will be implemented,
-            benefitting the whole community. SambaCHECK gives everybody a vote and a voice.
+          SambaCHECK is a plugin that provides a web3 security infrastructure for 
+            organizations, where they can make a non-fungible token (NFT) certification
+            for each product automatically. SambaCHECK creates a new layer of security
+            where brands can protect their products by providing a unique certification
+            which will be generated when the product is selling. SambaCHECK helps 
+            customers making better decisions, by providing information of the product,
+            which helps not only countering counterfeiting/forgery but also creating 
+            awareness of the impact of a product on the environment.
+
           </p>
           <div className="pt-4">
-            <Button onClick={CreateProjectsCLICK}>Let’s make decisions</Button>
+            <Button onClick={CreateProjectsCLICK}>Let's check</Button>
           </div>
         </div>
       </div>
