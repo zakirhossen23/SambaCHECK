@@ -12,29 +12,19 @@ import logo_white from "/public/Logo-white.svg";
 declare let window: any;
 export default function Welcome() {
   const router = useRouter();
-  function donateCLICK() {
+  function checkcClick() {
     if (typeof window.ethereum === "undefined") {
       window.open(
         "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
         "_blank"
       );
     } else  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
-      router.push("/login?[/daos]");
+      router.push("/login?[/CreateCertification]");
     } else {
-      router.push("/daos");
+      router.push("/CreateCertification");
     }
   }
 
-  function CreateProjectsCLICK() {
-    if (typeof window.ethereum === "undefined") {
-      window.open(
-        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
-        "_blank"
-      );
-    } else {
-      router.push("/daos");
-    }
-  }
   return (
     <>
       <Head>
@@ -61,7 +51,7 @@ export default function Welcome() {
 
           </p>
           <div className="pt-4">
-            <Button onClick={donateCLICK}>Let&apos;s check</Button>
+            <Button onClick={checkcClick}>Let&apos;s check</Button>
           </div>
         </div>
         <div className={styles.image}>
@@ -88,7 +78,7 @@ export default function Welcome() {
 
           </p>
           <div className="pt-4">
-            <Button onClick={CreateProjectsCLICK}>Let&apos;s check</Button>
+            <Button onClick={checkcClick}>Let&apos;s check</Button>
           </div>
         </div>
       </div>
