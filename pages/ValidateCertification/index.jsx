@@ -92,7 +92,7 @@ export default function ValidateCertification() {
     return (
       <>
         <div className="flex gap-4 justify-end">
-        {(!window.location.search.includes("embed")) ? (<> 
+        {(!window.location.search.includes("embed") && window.localStorage.getItem("Type") === "company") ? (<> 
           <NavLink href="/CreateCertification">
             <Button variant="secondary">
               <ControlsPlus className="text-moon-24" />

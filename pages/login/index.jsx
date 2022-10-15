@@ -49,72 +49,6 @@ export default function Login() {
   if (isServer()) return null;
 
 
-  function MetamaskWallet() {
-    if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
-      return (
-        <>
-          <div className="flex gap-6 flex w-full items-center">
-            <div
-              style={{ height: 80, width: 80, border: "1px solid #EBEBEB" }}
-              className="p-4 rounded-xl"
-            >
-                <img src="https://cryptologos.cc/logos/celo-celo-logo.png" />
-            </div>
-            <div className="flex flex-1 flex-col">
-            <span className="font-bold">Metamask wallet</span>
-              <span
-                className="flex items-center gap-1"
-                style={{ color: "#FF4E64" }}
-              >
-                <GenericClose
-                  className="text-moon-32"
-                  color="#FF4E64"
-                ></GenericClose>
-                Disconnected
-              </span>
-            </div>
-            <Button onClick={onClickConnect} style={{ width: 112 }}>
-              Connect
-            </Button>
-          </div>
-        </>
-      );
-    }
-    if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
-      return (
-        <>
-          <div className="flex gap-6 flex-1 w-full items-center">
-            <div
-              style={{ height: 80, width: 80, border: "1px solid #EBEBEB" }}
-              className="p-4 rounded-xl"
-            >
-              <img src="https://cryptologos.cc/logos/celo-celo-logo.png" />
-            </div>
-            <div className="flex flex-1 flex-col">
-              <span className="font-bold">Metamask wallet</span>
-              <span
-                className="flex items-center gap-1"
-                style={{ color: "#40A69F" }}
-              >
-                <GenericCheckRounded
-                  className="text-moon-32"
-                  color="#40A69F"
-                ></GenericCheckRounded>
-                Connected
-              </span>
-            </div>
-            <Button
-              onClick={onClickDisConnect}
-              variant="secondary"
-              style={{ width: 112 }}
-            >
-              Disconnect
-            </Button>
-          </div>
-        </>
-      );
-    }
-  }
   async function onClickConnect() {
     let result = await window.ethereum.request({ method: 'eth_requestAccounts' });
     result;
@@ -152,12 +86,34 @@ export default function Login() {
     }
     window.localStorage.setItem('ConnectedMetaMask', 'true')
   }
-  async function onClickDisConnect() {
-    window.localStorage.setItem("ConnectedMetaMask", "");
-    window.localStorage.setItem("Type", "");
+  async function TypeSet(e) {                           //Setting Type (Company/User)
+    window.localStorage.setItem('Type', e.target.getAttribute('type'))
+    await onClickConnect()
+    window.location.href = redirecting
   }
 
-  
+  function CompanyType() {                             //Company Button    
+    return (
+      <>
+        <div type="company" onClick={TypeSet} className={styles.companyButton}>
+          <span type="company" >
+            Company
+          </span>
+        </div>
+      </>
+    )
+  }
+  function UserType() {                            //User Button  
+    return (
+      <>
+        <div type="user" onClick={TypeSet} className={styles.userButton}>
+          <span type="user">
+            User
+          </span>
+        </div>
+      </>
+    )
+    }
 
   return (
     <>
@@ -170,11 +126,11 @@ export default function Login() {
       <div className={`${styles.container} flex items-center flex-col gap-8`}>
         <div className={`${styles.title} gap-8 flex flex-col`}>
           <h1 className="text-moon-32 font-bold">Login to your account</h1>
-          <p className="text-trunks">Please connect to Metamask wallet in order to login.</p>
         </div>
         <div className={styles.divider}></div>
-        <div className={`${styles.title} flex flex-col items-center gap-8`}>
-          <MetamaskWallet />
+        <div className={styles.Login_container}>
+          <CompanyType/>
+          <UserType/>
         </div>
 
       </div>

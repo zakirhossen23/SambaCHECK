@@ -19,9 +19,9 @@ export default function Welcome() {
         "_blank"
       );
     } else  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
-      router.push("/login?[/CreateCertification]");
+      router.push("/login?[/ValidateCertification]");
     } else {
-      router.push("/CreateCertification");
+      router.push("/ValidateCertification");
     }
   }
 

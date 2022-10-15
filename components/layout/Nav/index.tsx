@@ -4,51 +4,64 @@ import { Button } from "@heathmont/moon-core-tw";
 import { SoftwareLogOut } from "@heathmont/moon-icons-tw";
 import "../../../services/contract";
 import isServer from "../../../components/isServer";
-
 declare let window: any;
-
+let running = false;
 export function Nav(): JSX.Element {
   const [acc, setAcc] = useState('');
   const [accfull, setAccFull] = useState('');
   const [Balance, setBalance] = useState("");
- 
+
   const [isSigned, setSigned] = useState(false);
   async function fetchInfo() {
-    if (window.ethereum == null) {
-      window.document.getElementById("withoutSign").style.display = "none";
-      window.document.getElementById("withSign").style.display = "none";
-      window.document.getElementById("installMetaMask").style.display = "";
-      return;
-    }
-    if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
-      const Web3 = require("web3")
-      const web3 = new Web3(window.ethereum)
-      let Balance = await web3.eth.getBalance(window.ethereum.selectedAddress);
-
-      let subbing = 10;
-
-      if (window.innerWidth > 500) {
-        subbing = 20;
+    try {
+      if (window.ethereum == null) {
+        window.document.getElementById("withoutSign").style.display = "none";
+        window.document.getElementById("withSign").style.display = "none";
+        window.document.getElementById("installMetaMask").style.display = "";
+        return;
       }
-      setAccFull(window.ethereum.selectedAddress);
-      setAcc(window.ethereum.selectedAddress.toString().substring(0, subbing) + "...");
+      if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
+        const Web3 = require("web3")
+        const web3 = new Web3(window.ethereum)
+        let Balance = await web3.eth.getBalance(window.ethereum.selectedAddress);
 
-      setBalance(Balance / 1000000000000000000 + " Celo");
-      if (!isSigned)
-        setSigned(true);
+        let subbing = 10;
 
-      window.document.getElementById("withoutSign").style.display = "none";
-      window.document.getElementById("withSign").style.display = "";
-    } else {
-      setSigned(false);
-      window.document.getElementById("withoutSign").style.display = "";
-      window.document.getElementById("withSign").style.display = "none";
+        if (window.innerWidth > 500) {
+          subbing = 20;
+        }
+        setAccFull(window.ethereum.selectedAddress);
+        setAcc(window.ethereum.selectedAddress.toString().substring(0, subbing) + "...");
+
+        setBalance(Balance / 1000000000000000000 + " Celo");
+        if (!isSigned)
+          setSigned(true);
+
+        window.document.getElementById("withoutSign").style.display = "none";
+        window.document.getElementById("withSign").style.display = "";
+      } else {
+        setSigned(false);
+        window.document.getElementById("withoutSign").style.display = "";
+        window.document.getElementById("withSign").style.display = "none";
+      }
+    } catch (error) {
+
     }
+    running = false;
   }
   useEffect(() => {
     fetchInfo();
   });
 
+  if (!isServer()) {
+    window.onload = function () {
+      if (!running) {
+        running = true;
+        fetchInfo();
+       
+      }
+    }
+  }
 
   async function onClickDisConnect() {
     window.localStorage.setItem("ConnectedMetaMask", "");
@@ -60,14 +73,16 @@ export function Nav(): JSX.Element {
     <nav className="main-nav w-full flex justify-between items-center">
       <ul className="flex justify-between items-center w-full">
         {isSigned && !window.location.search.includes("embed") ? (<>
+          {(window.localStorage.getItem("Type") === "company") ? (<>
+            <li>
+              <NavLink href="/CreateCertification">
+                <a>
+                  <Button style={{ background: "none" }}>Create Certificate</Button>
+                </a>
+              </NavLink>
+            </li>
+          </>) : (<></>)}
 
-          <li>
-            <NavLink href="/CreateCertification" id="gransbtnNav">
-              <a>
-                <Button style={{ background: "none" }}>Create Certificate</Button>
-              </a>
-            </NavLink>
-          </li>
           <li>
             <NavLink href="/ValidateCertification">
               <a>
@@ -95,7 +110,7 @@ export function Nav(): JSX.Element {
             </div>
           </div>
 
-          <div id="withSign" className={`wallets ${(!window.location.search.includes("embed"))?("text-goten"):("")}`} style={{ display: "none" }}>
+          <div id="withSign" className={`wallets ${(!window.location.search.includes("embed")) ? ("text-goten") : ("")}`} style={{ display: "none" }}>
             <div
               className="wallet"
               style={{ height: 48, display: "flex", alignItems: "center" }}
