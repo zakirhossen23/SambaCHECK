@@ -79,6 +79,7 @@ export default function ValidateCertification() {
       if (validating !== "false") {
         //Valid certificate
         activateWorkingModal("Valid Certificate!");
+        if (document.getElementById("plugin")?.checked === true) await CreatePlugin(validating);
       } else {
         activateWarningModal("Invalid Certificate!");
       }
