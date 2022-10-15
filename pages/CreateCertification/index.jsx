@@ -65,7 +65,6 @@ export default function CreateCertification() {
     id: "numberbox",
   });
 
-  if (isServer()) return null;
 
   //Downloading plugin function
   function downloadURI(uri, name) {
@@ -150,6 +149,7 @@ async function fetchNumber(){
 useEffect(()=>{
   fetchNumber();
 })
+if (isServer()) return null;
 
   function CreateBTN() {
     return (
