@@ -8,7 +8,7 @@ contract CeloERC721 is ERC721 {
     //Certificate Struct
     struct certificate_struct {
         string wallet;
-        uint256 number;
+        string number;
         uint256 price;
         string location;
         string description;
@@ -18,7 +18,7 @@ contract CeloERC721 is ERC721 {
     }
 
     
-    uint256 private _certificate_ids;
+    uint256 public _certificate_ids;
     mapping(uint256 => certificate_struct) public _certificate_uris; //_certificate_ids => (Certificate) certificate_struct
 
     constructor(string memory name, string memory symbol)
@@ -26,7 +26,7 @@ contract CeloERC721 is ERC721 {
     {}
 
     //Certificate
-    function create_certificate(string memory _claimer,  uint256 number, uint256 price,string memory location,string memory description,string memory collection,string memory date, string memory image)
+    function create_certificate(string memory _claimer,  string memory number, uint256 price,string memory location,string memory description,string memory collection,string memory date, string memory image)
         public
         returns (uint256)
     {
@@ -37,13 +37,13 @@ contract CeloERC721 is ERC721 {
         return _certificate_ids;
     }
 
-    function validate_certificate(string memory _claimer,  uint256 number)
+    function validate_certificate(string memory _claimer,  string memory number)
         public
         view
         returns (string memory)
     {
         for (uint256 i = 0; i < _certificate_ids; i++){
-           if (keccak256(bytes(_claimer)) == keccak256(bytes(_certificate_uris[i].wallet)) && number == _certificate_uris[i].number){
+           if (keccak256(bytes(_claimer)) == keccak256(bytes(_certificate_uris[i].wallet)) && (keccak256(bytes(number))) == (keccak256(bytes(_certificate_uris[i].number)))){
                 return Strings.toString(i);
            }				
         }
@@ -57,8 +57,8 @@ contract CeloERC721 is ERC721 {
     }
 
   function testing() public returns (string memory){
-    create_certificate("0x168e007d9f5a794794e40035c5214963cb16bfb7",35, 300,"Dhaka","A T-shirt with the width of 5 \" and height of 7\" and a bag of 40 celo","T-shirt, bag","2022-10-13T04:06","image url");
-    return validate_certificate("0x168e007d9f5a794794e40035c5214963cb16bfb7",35);
+    create_certificate("0x168e007d9f5a794794e40035c5214963cb16bfb7","35", 300,"Dhaka","A T-shirt with the width of 5 \" and height of 7\" and a bag of 40 celo","T-shirt, bag","2022-10-13T04:06","image url");
+    return validate_certificate("0x168e007d9f5a794794e40035c5214963cb16bfb7","35");
   }
 
 

@@ -11,6 +11,7 @@ import styles from "./CreateCertification.module.css";
 import { Button } from "@heathmont/moon-core-tw";
 import { GenericPicture, TypeZoomOut, ControlsPlus } from "@heathmont/moon-icons-tw";
 import { Checkbox } from "@heathmont/moon-core-tw";
+import { useEffect } from "react";
 
 export default function CreateCertification() {
   const [Image, setImage] = useState([]);
@@ -20,13 +21,6 @@ export default function CreateCertification() {
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
   //Input fields
-  const [NumberBox, NumberBoxInput] = UseFormInput({
-    defaultValue: "",
-    type: "number",
-    placeholder: "Number",
-    id: "",
-  });
-
   const [Price, PriceInput] = UseFormInput({
     defaultValue: "",
     type: "number",
@@ -34,7 +28,7 @@ export default function CreateCertification() {
     id: "",
   });
   const [Location, LocationInput] = UseFormInput({
-    defaultValue: "",
+    defaultValue: "A0",
     type: "text",
     placeholder: "Site Location",
     id: "",
@@ -52,10 +46,23 @@ export default function CreateCertification() {
     id: "",
   });
   const [DateBox, DateInput] = UseFormInput({
-    defaultValue: "",
-    type: "datetime-local",
+    defaultValue:  (new Date()).toISOString().substring(0, 10),
+    type: "date",
     placeholder: "date",
     id: "",
+  });
+
+  const getWeekNumOfMonthOfDate = (d) => {
+    const firstDay = new Date(d.getFullYear(), d.getMonth(), 1).getDay();
+    let value =Math.ceil((d.getDate() + (firstDay - 1)) / 7)
+    return (value) < 10 ? `0${value}`: value;
+  }
+  let [NumberBox, NumberBoxInput] = UseFormInput({
+    defaultValue:`${(Location ===""?("A0"):(Location))}${(new Date(DateBox===""?(new Date()):(DateBox))).getFullYear().toString().at(2)}${getWeekNumOfMonthOfDate((new Date(DateBox===""?(new Date()):(DateBox))))}${(new Date(DateBox===""?(new Date()):(DateBox))).getFullYear().toString().at(3)}`,
+    type: "text",
+    placeholder: "",
+    disabled: true,
+    id: "numberbox",
   });
 
   if (isServer()) return null;
@@ -72,7 +79,7 @@ export default function CreateCertification() {
 
   //Creating plugin function
   async function CreatePlugin() {
-    const output = `<html><head></head><body><iframe src="${window.location.href}?embed"  style="width: 100%;height: 100%;" /></body></html>`;
+    const output = `<html><head></head><body><iframe src="${`http://${window.location.host}/Certificate?[${await window.contract._certificate_ids().call()}]`}"  style="width: 100%;height: 100%;" /></body></html>`;
     // Download it
     const blob = new Blob([output]);
     const fileDownloadUrl = URL.createObjectURL(blob);
@@ -101,8 +108,9 @@ export default function CreateCertification() {
     console.log("======================>Creating Certificate");
     try {
 
+      if (document.getElementById("plugin")?.checked === true) await CreatePlugin();
       // Creating  in Smart contract
-      await window.contract.create_certificate(window.ethereum.selectedAddress, Number(NumberBox), Number(Price), Location, Description, Collection, DateBox.toString(), JSON.stringify(allFiles))
+      await window.contract.create_certificate(window.ethereum.selectedAddress, NumberBox, Number(Price), Location, Description, Collection, DateBox.toString(), JSON.stringify(allFiles))
         .send({
           from: window.ethereum.selectedAddress,
           gasPrice: 1000000000,
@@ -133,6 +141,15 @@ export default function CreateCertification() {
     ImagePic.click();
 
   }
+ 
+async function fetchNumber(){
+  let box = document.getElementById("numberbox");
+  box.value = `${(Location ===""?"A0":Location)}${(new Date(DateBox===""?(new Date()):(DateBox))).getFullYear().toString().at(2)}${getWeekNumOfMonthOfDate((new Date(DateBox===""?(new Date()):(DateBox))))}${(new Date(DateBox===""?(new Date()):(DateBox))).getFullYear().toString().at(3)}`;
+  NumberBox = box.value;
+}
+useEffect(()=>{
+  fetchNumber();
+})
 
   function CreateBTN() {
     return (
@@ -186,10 +203,7 @@ export default function CreateCertification() {
       <div className={`${styles.container} flex items-center justify-center flex-col gap-8`}>
         <div className={`${styles.title} gap-8 flex justify-between`}>
           <h1 className="text-moon-32 font-bold">Create Certification</h1>
-          <div>
-            {(window.location.search.includes("embed") ? (<><Nav></Nav></>) : (<Button onClick={CreatePlugin}>Generate Plugin</Button>))}
-          </div>
-
+        
         </div>
         <div className={styles.divider}></div>
         <div className={`${styles.form} flex flex-col gap-8`}>
@@ -282,7 +296,9 @@ export default function CreateCertification() {
               </div>
             </div>
           </div>
-
+          <div>
+            <Checkbox label="Generate Certificate" id="plugin" />
+          </div>
 
           <CreateBTN />
         </div>

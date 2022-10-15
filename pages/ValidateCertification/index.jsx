@@ -25,7 +25,7 @@ export default function ValidateCertification() {
   });
   const [NumberBox, NumberBoxInput] = UseFormInput({
     defaultValue: "",
-    type: "number",
+    type: "text",
     placeholder: "Number",
     id: "",
   });
@@ -54,12 +54,12 @@ export default function ValidateCertification() {
     }
   
   //Creating plugin function
-  async function CreatePlugin() {
-    const output = `<html><head></head><body><iframe src="${window.location.href}?embed"  style="width: 100%;height: 100%;" /></body></html>`;
+  async function CreatePlugin(id) {
+    const output = `<html><head></head><body><iframe src="${`http://${window.location.host}/Certificate?[${id}]`}"  style="width: 100%;height: 100%;" /></body></html>`;
     // Download it
     const blob = new Blob([output]);
     const fileDownloadUrl = URL.createObjectURL(blob);
-    downloadURI(fileDownloadUrl, "Generated Validate Certificate Plugin.html");
+    downloadURI(fileDownloadUrl, "Generated Create Certificate Plugin.html");
     console.log(output);
   }
 
@@ -73,7 +73,7 @@ export default function ValidateCertification() {
     try {
 
       // Validate in Smart contract
-      let validating = await window.contract.validate_certificate(Wallet.toLowerCase(), Number(NumberBox)).call();
+      let validating = await window.contract.validate_certificate(Wallet.toLowerCase(), NumberBox).call();
 
       console.log(validating);
       if (validating !== "false") {
@@ -134,11 +134,7 @@ export default function ValidateCertification() {
       <div className={`${styles.container} flex items-center justify-center flex-col gap-8`}>
       <div className={`${styles.title} gap-8 flex justify-between`}>
           <h1 className="text-moon-32 font-bold">Validate Certificates</h1>
-          <div>
-            {(window.location.search.includes("embed") ? (<><Nav></Nav></>) : (<Button onClick={CreatePlugin}>Generate Plugin</Button>))}
-          </div>
-
-        </div>
+               </div>
         <div className={styles.divider}></div>
         <div id='alert' style={{ display: 'none', width: '640px' }} className="bg-red-100 border border-red-400 px-4 py-3 relative rounded text-center text-red-700" role="alert">
           {Alert}
@@ -155,6 +151,9 @@ export default function ValidateCertification() {
           <div>
             <h6>Number</h6>
             {NumberBoxInput}
+          </div>
+          <div>
+            <Checkbox label="Generate Certificate" id="plugin" />
           </div>
 
           <ValidateBTN />
