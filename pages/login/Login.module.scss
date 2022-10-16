@@ -55,7 +55,7 @@
   height: 100%;
   cursor: pointer;
   display: flex;
-  border-radius: calc(2vw /2);
+  border-radius: 0.4rem;
   color: white;
   font-size: 2rem;
   flex-wrap: nowrap;
@@ -80,5 +80,13 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border-radius: calc(2vw /2);
+  border-radius: 0.4rem;
+}
+
+
+.registerButton{
+  color: blue;
+  cursor: pointer;
+  float: left;
+  margin-left: 0.5rem;
 }

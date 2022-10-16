@@ -2,14 +2,50 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../../components/layout/Header";
 import Head from "next/head";
 import styles from "./Login.module.scss";
-import Button  from "@heathmont/moon-core-tw/lib/button/Button";
-import GenericCheckRounded  from "@heathmont/moon-icons-tw/lib/icons/GenericCheckRounded";
-import GenericClose  from "@heathmont/moon-icons-tw/lib/icons/GenericClose";
+import UseFormInput from "../../components/components/UseFormInput";
 import isServer from "../../components/isServer";
+import { Button } from "@heathmont/moon-core-tw";
 
 let redirecting = "";
 export default function Login() {
   const [ConnectStatus, setConnectStatus] = useState(true);
+  const [SecletedTab, setSecletedTab] = useState(0);
+
+  //Login Input fields
+  const [LoginEmailBox, LoginEmailBoxInput] = UseFormInput({
+    defaultValue: "",
+    type: "email",
+    placeholder: "Email",
+    id: "",
+  });
+  const [LoginPasswordBox, LoginPasswordBoxInput] = UseFormInput({
+    defaultValue: "",
+    type: "password",
+    placeholder: "Password",
+    id: "",
+  });
+
+  //Regidster Input fields  
+  const [RegisterUsernameBox, RegisterUsernameBoxInput] = UseFormInput({
+    defaultValue: "",
+    type: "text",
+    placeholder: "Username",
+    id: "",
+  });
+  const [RegisterEmailBox, RegisterEmailBoxInput] = UseFormInput({
+    defaultValue: "",
+    type: "email",
+    placeholder: "Email",
+    id: "",
+  });
+  const [RegisterPasswordBox, RegisterPasswordBoxInput] = UseFormInput({
+    defaultValue: "",
+    type: "password",
+    placeholder: "Password",
+    id: "",
+  });
+
+
 
   if (!isServer()) {
     const regex = /\[(.*)\]/g;
@@ -53,43 +89,55 @@ export default function Login() {
     let result = await window.ethereum.request({ method: 'eth_requestAccounts' });
     result;
     try {
-        const getacc = await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0xaef3', }], //44787
-        });
-        getacc;
+      const getacc = await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0xaef3', }], //44787
+      });
+      getacc;
     } catch (switchError) {
-        // This error code indicates that the chain has not been added to MetaMask.
-        if (switchError.code === 4902) {
-            try {
-                await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [
-                        {
-                            chainId: '0xaef3', //44787
-                            chainName: 'Alfajores Celo Testnet',
-                            nativeCurrency: {
-                                name: 'CELO',
-                                symbol: 'CELO',
-                                decimals: 18,
-                            },
-                            rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
-                        },
-                    ],
-                });
-            } catch (addError) {
-                // handle "add" error
-                console.log(addError);
-            }
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0xaef3', //44787
+                chainName: 'Alfajores Celo Testnet',
+                nativeCurrency: {
+                  name: 'CELO',
+                  symbol: 'CELO',
+                  decimals: 18,
+                },
+                rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+              },
+            ],
+          });
+        } catch (addError) {
+          // handle "add" error
+          console.log(addError);
         }
-        // handle other "switch" errors
+      }
+      // handle other "switch" errors
     }
     window.localStorage.setItem('ConnectedMetaMask', 'true')
   }
+  async function MetamaskLogin() {
+    await onClickConnect();
+    window.location.href = redirecting;
+  }
+  function SetTab(id) {
+    setSecletedTab(id);
+  }
+
   async function TypeSet(e) {                           //Setting Type (Company/User)
-    window.localStorage.setItem('Type', e.target.getAttribute('type'))
-    await onClickConnect()
-    window.location.href = redirecting
+    let type = e.target.getAttribute('type');
+    window.localStorage.setItem('Type', type);
+    if (type === "user") {
+      setSecletedTab(1);
+    } else {
+      MetamaskLogin();
+    }
   }
 
   function CompanyType() {                             //Company Button    
@@ -113,7 +161,30 @@ export default function Login() {
         </div>
       </>
     )
-    }
+  }
+
+  function EmailBTN() {                             //Email Button    
+    return (
+      <>
+        <div style={{ 'background': "#9E9C9F", width: '100%', fontSize: '1.6rem' }} onClick={() => SetTab(2)} className={styles.companyButton}>
+          <span  >
+            Login with Email
+          </span>
+        </div>
+      </>
+    )
+  }
+  function MetmaskBTN() {                            //Metamask Button  
+    return (
+      <>
+        <div style={{ 'background': "#FF7000", width: '100%', fontSize: '1.6rem' }} onClick={MetamaskLogin} className={styles.userButton}>
+          <span>
+            Login with Metamask
+          </span>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -123,17 +194,86 @@ export default function Login() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header></Header>
-      <div className={`${styles.container} flex items-center flex-col gap-8`}>
-        <div className={`${styles.title} gap-8 flex flex-col`}>
-          <h1 className="text-moon-32 font-bold">Login to your account</h1>
-        </div>
-        <div className={styles.divider}></div>
-        <div className={styles.Login_container}>
-          <CompanyType/>
-          <UserType/>
-        </div>
+      {(SecletedTab === 0) ? (<>
+        <div className={`${styles.container} flex items-center flex-col gap-8`}>
+          <div className={`${styles.title} gap-8 flex flex-col`}>
+            <h1 className="text-moon-32 font-bold">Login to your account</h1>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.Login_container}>
+            <CompanyType />
+            <UserType />
+          </div>
 
-      </div>
+        </div>
+      </>) : ((SecletedTab === 1) ? (<>
+        <div className={`${styles.container} flex items-center flex-col gap-8`}>
+          <div className={`${styles.title} gap-8 flex flex-col`}>
+            <h1 className="text-moon-32 font-bold">Login with email, or metamask</h1>
+          </div>
+          <div className={styles.divider}></div>
+          <div style={{ flexDirection: 'column-reverse' }} className={styles.Login_container}>
+            <EmailBTN />
+            <MetmaskBTN />
+          </div>
+
+        </div>
+      </>) : ((SecletedTab === 2) ? (<>
+        <div className={`${styles.container} flex items-center flex-col gap-8`}>
+          <div className={`${styles.title} gap-8 flex flex-col`}>
+            <h1 className="text-moon-32 font-bold">Login with email</h1>
+          </div>
+          <div className={styles.divider}></div>
+          <div style={{ width: '23rem' }} className="flex flex-col gap-2">
+            <div className="gap-1">
+              <h6>Email</h6>
+              {LoginEmailBoxInput}
+            </div>
+            <div className="gap-1">
+              <h6>Password</h6>
+              {LoginPasswordBoxInput}
+            </div>
+            <div className="flex flex-col">
+              <Button >Login</Button>
+              <div style={{ marginTop: " 0.5rem" }}>
+                <h3 onClick={() => SetTab(3)} className={styles.registerButton}>Create an account</h3>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </>) : (<>
+        <div className={`${styles.container} flex items-center flex-col gap-8`}>
+          <div className={`${styles.title} gap-8 flex flex-col`}>
+            <h1 className="text-moon-32 font-bold">Register</h1>
+          </div>
+          <div className={styles.divider}></div>
+          <div style={{ width: '23rem' }} className="flex flex-col gap-2">
+            <div className="gap-1">
+              <h6>Username</h6>
+              {RegisterUsernameBoxInput}
+            </div>
+            <div className="gap-1">
+              <h6>Email</h6>
+              {RegisterEmailBoxInput}
+            </div>
+            <div className="gap-1">
+              <h6>Password</h6>
+              {RegisterPasswordBoxInput}
+            </div>
+            <div className="flex flex-col">
+              <Button >Register</Button>
+              <div style={{ marginTop: " 0.5rem", display: 'flex' }}>
+                Already have an account? <h3 onClick={() => SetTab(2)} className={styles.registerButton}>Login</h3>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </>)))}
+
     </>
   );
 }
