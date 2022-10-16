@@ -74,12 +74,15 @@ export default function Login() {
   };
   useEffect(() => {
     if (!isServer()) {
-      setInterval(() => {
-        if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
-          window.location.href = redirecting;
-        }
-        fetchDataStatus();
-      }, 1000);
+      if (window.ethereum !== undefined){
+        setInterval(() => {
+          if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
+            window.location.href = redirecting;
+          }        
+          fetchDataStatus();
+        }, 1000);
+      }
+     
     }
   }, []);
   if (isServer()) return null;
@@ -123,8 +126,15 @@ export default function Login() {
     window.localStorage.setItem('ConnectedMetaMask', 'true')
   }
   async function MetamaskLogin() {
-    await onClickConnect();
-    window.location.href = redirecting;
+    if (typeof window.ethereum === "undefined") {
+      window.open(
+        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
+        "_blank"
+      );
+    }else{
+      await onClickConnect();
+      window.location.href = redirecting;
+    }
   }
   function SetTab(id) {
     setSecletedTab(id);

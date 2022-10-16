@@ -13,12 +13,7 @@ declare let window: any;
 export default function Welcome() {
   const router = useRouter();
   function checkcClick() {
-    if (typeof window.ethereum === "undefined") {
-      window.open(
-        "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
-        "_blank"
-      );
-    } else  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
+  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("ConnectedMetaMask") !== "true") {
       router.push("/login?[/ValidateCertification]");
     } else {
       router.push("/ValidateCertification");

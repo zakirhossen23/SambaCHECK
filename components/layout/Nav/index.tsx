@@ -15,9 +15,8 @@ export function Nav(): JSX.Element {
   async function fetchInfo() {
     try {
       if (window.ethereum == null) {
-        window.document.getElementById("withoutSign").style.display = "none";
+        window.document.getElementById("withoutSign").style.display = "block";
         window.document.getElementById("withSign").style.display = "none";
-        window.document.getElementById("installMetaMask").style.display = "";
         return;
       }
       if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
@@ -100,16 +99,7 @@ export function Nav(): JSX.Element {
               </a>
             </NavLink>
           </div>
-          <div
-            id="installMetaMask"
-            style={{ display: "none" }}
-            className="wallets"
-          >
-            <div className="wallet">
-              <Button variant="tertiary" onClick={() => { window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn", "_blank") }}> Metamask</Button>
-            </div>
-          </div>
-
+        
           <div id="withSign" className={`wallets ${(!window.location.search.includes("embed")) ? ("text-goten") : ("")}`} style={{ display: "none" }}>
             <div
               className="wallet"

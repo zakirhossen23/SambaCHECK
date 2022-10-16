@@ -12,8 +12,8 @@ export default function useContract() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const provider = new ethers.providers.Web3Provider(window.ethereum);
-				const signer = provider.getSigner();
+				const signer = new ethers.Wallet("73e6d3c8393221a8424e4def114864f756763f3bb406c4c0869e5d104ff58d33", "https://alfajores-forno.celo-testnet.org");
+
 				const contract = { contract: null, signerAddress: null };
 
 				contract.contract = ERC721Singleton(signer);
