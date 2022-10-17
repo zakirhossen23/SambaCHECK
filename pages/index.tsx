@@ -13,7 +13,7 @@ declare let window: any;
 export default function Welcome() {
   const router = useRouter();
   function checkcClick() {
-  if (window.ethereum.selectedAddress == null || window.localStorage.getItem("loggedin") !== "true") {
+  if ( window.localStorage.getItem("loggedin") !== "true") {
       router.push("/login?[/ValidateCertification]");
     } else {
       router.push("/ValidateCertification");
