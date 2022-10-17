@@ -1,7 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import { Button } from "@heathmont/moon-core-tw";
-import Form from "react-bootstrap/Form";
 import { Header } from "../../components/layout/Header";
 import UseFormInput from "../../components/components/UseFormInput";
 export default function ResetDataFORM() {
