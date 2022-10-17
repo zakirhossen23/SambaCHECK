@@ -16,10 +16,18 @@ contract CeloERC721 is ERC721 {
         string date;
         string image;
     }
-
+   //Person Struct
+    struct person_struct {
+        uint256 userid;
+        string username;
+        string email;
+        string password;
+    }
     
     uint256 public _certificate_ids;
+    uint256 public _person_ids;
     mapping(uint256 => certificate_struct) public _certificate_uris; //_certificate_ids => (Certificate) certificate_struct
+    mapping(uint256 => person_struct) public _person_uris; //_person_ids => (Person) person_struct
 
     constructor(string memory name, string memory symbol)
         ERC721(name, symbol)
@@ -50,10 +58,31 @@ contract CeloERC721 is ERC721 {
         return "false";
     }
 
+
+    //Person
+    function register_person(string memory username, string memory email, string memory password) public returns (uint256){
+        //Regsiter person into _person_uris
+        _person_uris[_person_ids] = person_struct(_person_ids,username,email,password );
+        _person_ids++;
+
+        return _person_ids; 
+    }
+
+    function login_person(string memory email,  string memory password)public view returns (string memory){
+        for (uint256 i = 0; i < _person_ids; i++){
+           if (keccak256(bytes(email)) == keccak256(bytes(_person_uris[i].email)) && (keccak256(bytes(password))) == (keccak256(bytes(_person_uris[i].password)))){
+                return Strings.toString(i);
+           }				
+        }
+        return "false";
+    }
+
    
     function reset_all() public {
       _certificate_ids = 0;
+      _person_ids = 0;
       for (uint256 i = 0; i < _certificate_ids; i++)    delete _certificate_uris[i];
+      for (uint256 i = 0; i < _person_ids; i++)    delete _person_uris[i];
     }
 
   function testing() public returns (string memory){

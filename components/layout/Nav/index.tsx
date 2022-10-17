@@ -8,18 +8,18 @@ declare let window: any;
 let running = false;
 export function Nav(): JSX.Element {
   const [acc, setAcc] = useState('');
-  const [accfull, setAccFull] = useState('');
+  const [LoginType, setLoginType] = useState('');
   const [Balance, setBalance] = useState("");
 
   const [isSigned, setSigned] = useState(false);
   async function fetchInfo() {
     try {
-      if (window.ethereum == null) {
+      if (window.localStorage.getItem("loggedin") !== "true") {
         window.document.getElementById("withoutSign").style.display = "block";
         window.document.getElementById("withSign").style.display = "none";
         return;
       }
-      if (window.ethereum.selectedAddress != null && window.localStorage.getItem("ConnectedMetaMask") == "true") {
+      if (window.localStorage.getItem("login-type") === "metamask") {
         const Web3 = require("web3")
         const web3 = new Web3(window.ethereum)
         let Balance = await web3.eth.getBalance(window.ethereum.selectedAddress);
@@ -29,7 +29,7 @@ export function Nav(): JSX.Element {
         if (window.innerWidth > 500) {
           subbing = 20;
         }
-        setAccFull(window.ethereum.selectedAddress);
+        setLoginType("metamask");
         setAcc(window.ethereum.selectedAddress.toString().substring(0, subbing) + "...");
 
         setBalance(Balance / 1000000000000000000 + " Celo");
@@ -38,7 +38,19 @@ export function Nav(): JSX.Element {
 
         window.document.getElementById("withoutSign").style.display = "none";
         window.document.getElementById("withSign").style.display = "";
-      } else {
+      }
+      else if (window.localStorage.getItem("login-type") === "email") {
+        try {
+          let userinfo = await window.contract._person_uris(Number(window.localStorage.userid)).call();
+          setAcc(userinfo.username);
+          setBalance(userinfo.email);
+          setLoginType("email");
+          setSigned(true);
+          window.document.getElementById("withoutSign").style.display = "none";
+          window.document.getElementById("withSign").style.display = "";
+        } catch (error) { }
+      }
+      else {
         setSigned(false);
         window.document.getElementById("withoutSign").style.display = "";
         window.document.getElementById("withSign").style.display = "none";
@@ -57,13 +69,13 @@ export function Nav(): JSX.Element {
       if (!running) {
         running = true;
         fetchInfo();
-       
+
       }
     }
   }
 
   async function onClickDisConnect() {
-    window.localStorage.setItem("ConnectedMetaMask", "");
+    window.localStorage.setItem("loggedin", "");
     window.localStorage.setItem("Type", "");
     window.location.href = "/";
   }
@@ -99,19 +111,20 @@ export function Nav(): JSX.Element {
               </a>
             </NavLink>
           </div>
-        
+
           <div id="withSign" className={`wallets ${(!window.location.search.includes("embed")) ? ("text-goten") : ("")}`} style={{ display: "none" }}>
             <div
               className="wallet"
               style={{ height: 48, display: "flex", alignItems: "center" }}
             >
               <div className="wallet__wrapper gap-4 flex items-center">
-                <div className="wallet__info flex flex-col items-end">
-                  <a className="text-primary">
-                    <div className="font-light">{acc}</div>
-                  </a>
-                  <div >{Balance}</div>
-                </div>
+              <div className="wallet__info flex flex-col items-end">
+                    <a className="text-primary">
+                      <div className="font-light">{acc}</div>
+                    </a>
+                    <div >{Balance}</div>
+                  </div>
+
                 <Button iconOnly onClick={onClickDisConnect}>
                   <SoftwareLogOut
                     className="text-moon-24"
