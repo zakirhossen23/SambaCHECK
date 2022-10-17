@@ -76,7 +76,8 @@ export function Nav(): JSX.Element {
 
   async function onClickDisConnect() {
     window.localStorage.setItem("loggedin", "");
-    window.localStorage.setItem("Type", "");
+    window.localStorage.setItem('login-type', "");
+    window.localStorage.setItem('Type', "");
     window.location.href = "/";
   }
   if (isServer()) return <></>;
