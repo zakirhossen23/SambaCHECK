@@ -104,7 +104,7 @@ export default function ValidateCertification() {
         //Valid certificate
         activateWorkingModal("Valid Certificate!");
         if (document.getElementById("plugin_certificate")?.checked === true) await CreatePlugin(validating);
-        if (document.getElementsByName("emailchecked")[0]?.checked === true) await SendMessage(validating);
+        if (document.getElementById("emailchecked")?.checked === true) await SendMessage(validating);
       } else {
         activateWarningModal("Invalid Certificate!");
       }
