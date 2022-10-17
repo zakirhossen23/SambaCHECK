@@ -293,7 +293,7 @@ export default function Login() {
           </div>
           <div className={styles.divider}></div>
           <div style={{ width: '23rem' }} className="flex flex-col gap-2">
-            <div id='alert' style={{ display: 'none', width: '640px' }} className="bg-red-100 border border-red-400 px-4 py-3 relative rounded text-center text-red-700" role="alert">
+            <div id='alert' style={{ display: 'none'}} className="bg-red-100 border border-red-400 px-4 py-3 relative rounded text-center text-red-700" role="alert">
               {Alert}
             </div>
             <div className="gap-1">

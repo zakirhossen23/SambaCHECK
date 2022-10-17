@@ -119,12 +119,14 @@ export function Nav(): JSX.Element {
               style={{ height: 48, display: "flex", alignItems: "center" }}
             >
               <div className="wallet__wrapper gap-4 flex items-center">
-              <div className="wallet__info flex flex-col items-end">
-                    <a className="text-primary">
-                      <div className="font-light">{acc}</div>
-                    </a>
-                    <div >{Balance}</div>
-                  </div>
+                <div className="wallet__info flex flex-col items-end">
+                  <a className="text-primary">
+                    <div className="font-light">{acc}</div>
+                  </a>
+                  {window.localStorage.getItem("login-type") === "metamask" ? (<>
+                    <div >{Balance}</div></>) : (<></>)}
+
+                </div>
 
                 <Button iconOnly onClick={onClickDisConnect}>
                   <SoftwareLogOut
