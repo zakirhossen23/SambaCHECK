@@ -103,8 +103,8 @@ export default function ValidateCertification() {
       if (validating !== "false") {
         //Valid certificate
         activateWorkingModal("Valid Certificate!");
-        if (document.getElementById("plugin")?.checked === true) await CreatePlugin(validating);
-        if (document.getElementById("email")?.checked === true) await SendMessage(validating);
+        if (document.getElementById("plugin_certificate")?.checked === true) await CreatePlugin(validating);
+        if (document.getElementsByName("emailchecked")[0]?.checked === true) await SendMessage(validating);
       } else {
         activateWarningModal("Invalid Certificate!");
       }
@@ -179,9 +179,9 @@ export default function ValidateCertification() {
             {NumberBoxInput}
           </div>
           <div className="flex flex-col">
-            <Checkbox label="Generate Certificate" id="plugin" />
+            <Checkbox label="Generate Certificate" id="plugin_certificate" />
             {window.localStorage.getItem("login-type") === "email" ? (<>
-              <Checkbox label=" Send to email?" id="email" />
+              <Checkbox label=" Send to email?"  id="emailchecked" />
             </>) : (<></>)}
           </div>
 
